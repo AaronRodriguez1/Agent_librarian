@@ -1,0 +1,6 @@
+langchain
+openai
+pydub
+ffmpeg
+chromadb
+whisper
