@@ -1,0 +1,11 @@
+#Ignore files 
+
+lib/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.vscode/
+*.log
+*.tmp
+.gitmodules
