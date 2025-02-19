@@ -1,6 +1,9 @@
 langchain
 openai
-pydub
-ffmpeg
-chromadb
 whisper
+faiss-cpu
+numpy
+argparse
+logging
+json 
+os
