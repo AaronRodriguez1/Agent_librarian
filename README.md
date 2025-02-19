@@ -1,93 +1,258 @@
-# Agent_Librarian
+# Agent Librarian - Generative AI Multimedia Transcriber & Vector Search #
 
+## Purpose
+During my interview for the Generative AI Agents Developer position, I discussed how I would approach the system design question below involving audio transcription and processing. I mentioned that I would consult the LangChain documentation to refine my approach—this project is the result of that follow-up research and effort. 
 
+**Question:**
+"Now, what if I gave you an video file instead? How would you create an agent that finds where in the video it talks about a specific topic and replies with the timestamp, while also using the original JSON database?"
 
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/ml2774906/agent_librarian.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.com/ml2774906/agent_librarian/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
+**Inspiration:** I designed an agent that I can use in my daily studies as a Masters in AI student. This agent acts like a librarian: it not only locates information related to my queries within my lecture videos, but it also provides supporting research papers to enhance my learning.
+ 
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+The project provides a robust pipeline for:
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+-**Audio Transcription:** Converting audio files into JSON with timestamped text segments using OpenAI's Whisper model.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+-**Text Vectorization:** Transforming transcript data and given files into vector embeddings.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+-**Semantic Search:** Uses FAISS indexing for fast similarity searches, enabling applications such as chatbots, search engines, and retrieval-augmented generation (RAG) systems.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+## Architecture & Design 
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+- **Audio Transcription (audio_transcriber.py):**
+  Transcribes audio files into JSON with timestamped text segments using OpenAI's Whisper model.
+- **Transcript Vectorization (vectorize_transcript.py):**
+  Processes transcript JSON files, converts text segments into vector embeddings using OpenAI embeddings, and builds a FAISS index for fast similarity searches.
+- **Knowledge Base Conversion (vectorize_knowledge_base.py):**
+  Converts a JSON file of academic papers (combining title, link, and significance) into a FAISS vector database with metadata.
+- **Interactive Chatbot (semantic_audio_search.py):**
+  Provides an interactive chatbot to search transcript and knowledge base indexes.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## Data Flow 
+- **Input:** Audio files and JSON knowledge base.
+- **Processing:** 
+    - Transcription of audio with timestamps.
+    - Text Vectorization (OpenAI embeddings).
+    - FAISS Indexing (for fast retrieval).
+- **Output:** Vector search results, chatbot responses.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
 
-## License
-For open source projects, say how it is licensed.
+# Getting Started #
+## Install Dependencies 
+```bash
+pip install -r requirments.txt
+```
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## Installation 
+1. **Clone the Repository:**
+```bash
+git clone https://gitlab.com/ml2774906/agent_librarian.git
+cd agent_librarian
+``` 
+
+## Set Enviornment Variables 
+``` bash
+export OPENAI_API_KEY="your_openai_api_key"
+```
+
+# Usage # 
+
+**1. Transcribe Audio**
+Run the transcription script to convert an audio file into JSON with timestamped text segments:
+```bash
+python src/audio_transcriber.py "path/to/audio.mp3" --output "transcription.json" --metadata_output "transcript_metadata.json"
+```
+
+**2. Vectorize Transcript**
+Convert a transcript JSON into vector embeddings and build a FAISS index:
+```bash
+python src/vectorize_transcript.py --transcript_json "path/to/transcription.json" --output_index "transcript.index"
+```
+
+**3. Convert Given Data to Vector Database**
+Process a JSON file of academic papers into a FAISS vector database:
+```bash
+python src/vectorize_knowledge_base.py --json_path "path/to/knowledge_base.json" --output_index "knowledge_base.index" --output_metadata "knowledge_base_metadata.json"
+```
+
+**4. Run the Chatbot**
+Start the interactive chatbot to query both the transcript and knowledge base:
+```bash
+python src/semantic_audio_search.py \
+    --transcript_index "path/to/transcript.index" \
+    --transcript_metadata "path/to/transcript_metadata.json" \
+    --kb_index "path/to/knowledge_base.index" \
+    --kb_metadata "path/to/knowledge_base_metadata.json" \
+    --top_k 3
+```
+
+
+# Example Queries & Demonstration:
+
+Running -
+```bash
+python src/semantic_audio_search.py \
+    --transcript_index "path/to/transcript.index" \
+    --transcript_metadata "path/to/transcript_metadata.json" \
+    --kb_index "path/to/knowledge_base.index" \
+    --kb_metadata "path/to/knowledge_base_metadata.json" \
+    --top_k 3
+```
+```
+Chatbot (type 'exit' to quit)
+
+User: Where does this video talk about latent space?
+
+Transcript Results:
+1. Score: 0.877 | Timestamp: 00:04:22
+   Text: Latent space operation....
+
+2. Score: 0.826 | Timestamp: 00:12:11
+   Text: The query comes from the noisy latent images spatial features....
+
+3. Score: 0.823 | Timestamp: 00:01:56
+   Text: The model works in the latent space to make the process faster and more memory efficient....
+
+Knowledge Base Results:
+1. Score: 0.751 | Title: Auto-Encoding Variational Bayes
+   Link: https://arxiv.org/abs/1312.6114
+   Significance: This paper introduced the variational autoencoder (VAE), a powerful framework for probabilistic generative modeling. It combined variational inference...
+
+2. Score: 0.751 | Title: Scaling Laws for Neural Language Models
+   Link: https://arxiv.org/abs/2001.08361
+   Significance: This paper investigated how the performance of neural language models scales with increasing model size, data, and compute. It provided empirical evid...
+
+3. Score: 0.743 | Title: GPT-3: Language Models are Few-Shot Learners
+   Link: https://arxiv.org/abs/2005.14165
+   Significance: This paper presented GPT-3, a massive language model that achieved remarkable performance with minimal task-specific training. It demonstrated that sc...
+
+
+User: What is stable diffusion?
+
+Transcript Results:
+1. Score: 0.896 | Timestamp: 00:00:16
+   Text: how cross-attention works in stable diffusion....
+
+2. Score: 0.888 | Timestamp: 00:03:03
+   Text: Stable diffusion uses a process called latent diffusion to generate images....
+
+3. Score: 0.885 | Timestamp: 00:04:24
+   Text: Unlike traditional diffusion models, stable diffusion operates in latent space....
+
+Knowledge Base Results:
+1. Score: 0.729 | Title: Dropout: A Simple Way to Prevent Neural Networks from Overfitting
+   Link: https://www.cs.toronto.edu/~hinton/absps/JMLRdropout.pdf
+   Significance: This paper introduced dropout as a novel regularization technique to prevent overfitting in neural networks. It works by randomly deactivating a subse...
+
+2. Score: 0.728 | Title: Adam: A Method for Stochastic Optimization
+   Link: https://arxiv.org/abs/1412.6980
+   Significance: This paper introduced the Adam optimizer, which adapts learning rates for each parameter based on estimates of first and second moments. It combined i...
+
+3. Score: 0.726 | Title: Deep Residual Learning for Image Recognition
+   Link: https://arxiv.org/abs/1512.03385
+   Significance: This paper introduced residual connections, which allowed for the effective training of extremely deep neural networks. It addressed the vanishing gra...
+
+
+User: Where does the video reference the encoder and decoder?
+
+Transcript Results:
+1. Score: 0.865 | Timestamp: 00:08:57
+   Text: The encoder captures context from the image, while the decoder reconstructs the image....
+
+2. Score: 0.861 | Timestamp: 00:00:39
+   Text: One, encoder....
+
+3. Score: 0.858 | Timestamp: 00:01:44
+   Text: One, encoder decoder structure....
+
+Knowledge Base Results:
+1. Score: 0.775 | Title: Auto-Encoding Variational Bayes
+   Link: https://arxiv.org/abs/1312.6114
+   Significance: This paper introduced the variational autoencoder (VAE), a powerful framework for probabilistic generative modeling. It combined variational inference...
+
+2. Score: 0.749 | Title: Sequence to Sequence Learning with Neural Networks
+   Link: https://arxiv.org/abs/1409.3215
+   Significance: This paper introduced the sequence-to-sequence (seq2seq) framework, enabling end-to-end training for tasks like machine translation. It demonstrated t...
+
+3. Score: 0.746 | Title: Attention Is All You Need
+   Link: https://arxiv.org/abs/1706.03762
+   Significance: This work introduced the Transformer architecture, which relies solely on attention mechanisms. It eliminated the need for recurrent and convolutional...
+
+User: exit
+Exiting.
+```
+# Changing the top_k = 5. (This will now return the top 5 scores for both the transcript and knowledge base indexes.)
+Running -
+```bash
+python src/semantic_audio_search.py \
+    --transcript_index "path/to/transcript.index" \
+    --transcript_metadata "path/to/transcript_metadata.json" \
+    --kb_index "path/to/knowledge_base.index" \
+    --kb_metadata "path/to/knowledge_base_metadata.json" \
+    --top_k 5
+```
+```
+Chatbot (type 'exit' to quit)
+
+User: Why is noise needed?
+
+Transcript Results:
+1. Score: 0.866 | Timestamp: 00:06:19
+   Text: Noising....
+
+2. Score: 0.848 | Timestamp: 00:10:27
+   Text: Three. Noise subtraction....
+
+3. Score: 0.840 | Timestamp: 00:09:58
+   Text: One. Start with noise. The process begins with random noise, latent noise....
+
+4. Score: 0.838 | Timestamp: 00:08:14
+   Text: One. Noise prediction....
+
+5. Score: 0.834 | Timestamp: 00:06:31
+   Text: This is the noising part of the process, and the model learns how to reverse this process....
+
+Knowledge Base Results:
+1. Score: 0.748 | Title: Dropout: A Simple Way to Prevent Neural Networks from Overfitting
+   Link: https://www.cs.toronto.edu/~hinton/absps/JMLRdropout.pdf
+   Significance: This paper introduced dropout as a novel regularization technique to prevent overfitting in neural networks. It works by randomly deactivating a subse...
+
+2. Score: 0.737 | Title: Attention Is All You Need
+   Link: https://arxiv.org/abs/1706.03762
+   Significance: This work introduced the Transformer architecture, which relies solely on attention mechanisms. It eliminated the need for recurrent and convolutional...
+
+3. Score: 0.730 | Title: The Lottery Ticket Hypothesis: Finding Sparse, Trainable Neural Networks
+   Link: https://arxiv.org/abs/1803.03635
+   Significance: This work proposed that within large, over-parameterized neural networks exist smaller subnetworks, or 'winning tickets', that can be trained effectiv...
+
+4. Score: 0.720 | Title: Generative Adversarial Nets
+   Link: https://arxiv.org/abs/1406.2661
+   Significance: This paper proposed the generative adversarial network (GAN) framework, which pits two neural networks against each other in a game-theoretic scenario...
+
+5. Score: 0.718 | Title: Neural Machine Translation by Jointly Learning to Align and Translate
+   Link: https://arxiv.org/abs/1409.0473
+   Significance: This paper extended the seq2seq model by incorporating an attention mechanism to improve translation quality. The attention mechanism allowed the mode...
+
+User: exit
+Exiting.
+
+```
+
+# Future Enhancements # 
+- I am currently enrolled in NVIDIA Riva training (Feb 25), where I will explore real-time ASR (Automatic Speech Recognition) and speech AI pipelines.
+
+- Future work will include replacing OpenAI Whisper with Riva's optimized speech-to-text engine to enhance real-time processing.
+
+
+## Authors
+
+Aaron Rodriguez
+
+## Version History
+
+* 0.1
+    * Initial Release
+
