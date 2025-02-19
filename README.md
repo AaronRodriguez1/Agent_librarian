@@ -1,12 +1,12 @@
 # Agent Librarian - Generative AI Multimedia Transcriber & Vector Search #
 
 ## Purpose
-During my interview for the Generative AI Agents Developer position, I discussed how I would approach the system design question below involving audio transcription and processing. I mentioned that I would consult the LangChain documentation to refine my approach—this project is the result of that follow-up research and effort. 
+During my interview for the Generative AI Agents Developer position, I discussed how I would approach the system design question involving audio transcription and processing. I mentioned that I would consult the LangChain documentation to refine my approach. This project is the result of that follow up research and effort. 
 
 **Question:**
 "Now, what if I gave you an video file instead? How would you create an agent that finds where in the video it talks about a specific topic and replies with the timestamp, while also using the original JSON database?"
 
-**Inspiration:** I designed an agent that I can use in my daily studies as a Masters in AI student. This agent acts like a librarian: it not only locates information related to my queries within my lecture videos, but it also provides supporting research papers to enhance my learning.
+**Inspiration:** I designed an agent that I can use in my daily studies as a Masters in AI student. This agent acts like a librarian, it not only locates information related to my queries within my lecture videos, but it also provides supporting research papers to enhance my learning.
  
 ## Description
 The project provides a robust pipeline for:
@@ -20,7 +20,7 @@ The project provides a robust pipeline for:
 
 
 ## Architecture & Design 
-
+The flow is described below:
 - **Audio Transcription (audio_transcriber.py):**
   Transcribes audio files into JSON with timestamped text segments using OpenAI's Whisper model.
 - **Transcript Vectorization (vectorize_transcript.py):**
