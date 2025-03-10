@@ -111,7 +111,7 @@ def main():
     # Convert each paper into a text string for vectorization
     texts = [paper_to_text(paper) for paper in papers]
     
-    # Initialize the embeddings model
+    # Initialize the embeddings model 
     logging.info("Initializing OpenAI embeddings model...")
     embeddings_model = OpenAIEmbeddings()
     
